@@ -39,4 +39,7 @@ private class MarshalInputStream(input: InputStream) : sun.rmi.server.MarshalInp
             Thread.currentThread().contextClassLoader,
         )
     }
+
+    override fun readLocation() =
+        super.readLocation()?.also { println("JRMP: location=$it") }
 }
