@@ -32,6 +32,7 @@ private class MarshalInputStream(input: InputStream) : sun.rmi.server.MarshalInp
     override fun resolveProxyClass(interfaces: Array<String>): Class<*> = kotlin.runCatching {
         super.resolveProxyClass(interfaces)
     }.getOrElse {
+        System.err.println("resolveProxyClass failed. Use fallback. Cause: $it")
         LoaderHandler.loadProxyClass(
             null,
             arrayOf("java.rmi.Remote"),
