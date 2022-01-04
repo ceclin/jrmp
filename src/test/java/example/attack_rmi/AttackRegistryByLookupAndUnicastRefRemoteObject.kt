@@ -6,8 +6,8 @@ import sun.rmi.transport.LiveRef
 import sun.rmi.transport.tcp.TCPEndpoint
 import top.ceclin.jrmp.RegistryV1
 import top.ceclin.jrmp.ext.replace
-import top.ceclin.jrmp.request.Packet
-import top.ceclin.jrmp.request.packet
+import top.ceclin.jrmp.request.Request
+import top.ceclin.jrmp.request.request
 import top.ceclin.jrmp.request.singleOp
 import java.lang.reflect.Proxy
 import java.net.Socket
@@ -38,7 +38,7 @@ fun main() {
     }
     Socket("127.0.0.1", Registry.REGISTRY_PORT).use {
         it.tcpNoDelay = true
-        val packet: Packet = operation.singleOp().packet()
-        it.outputStream.write(packet.value)
+        val request: Request = operation.singleOp().request()
+        it.outputStream.write(request.value)
     }
 }

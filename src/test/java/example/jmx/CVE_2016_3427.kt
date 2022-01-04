@@ -4,8 +4,8 @@ import sun.rmi.server.UnicastRef
 import top.ceclin.jrmp.RegistryV2
 import top.ceclin.jrmp.ext.jrmpHash
 import top.ceclin.jrmp.ext.tcpEndpoint
-import top.ceclin.jrmp.request.Packet
-import top.ceclin.jrmp.request.packet
+import top.ceclin.jrmp.request.Request
+import top.ceclin.jrmp.request.request
 import top.ceclin.jrmp.request.rmiCall
 import top.ceclin.jrmp.request.singleOp
 import top.ceclin.jrmp.response.Return
@@ -18,11 +18,11 @@ import javax.management.remote.rmi.RMIServer
 fun main() {
     val liveRef = Socket("127.0.0.1", 2222).use {
         it.tcpNoDelay = true
-        val packet: Packet = RegistryV2.lookup {
+        val request: Request = RegistryV2.lookup {
             writeObject("jmxrmi")
-        }.singleOp().packet()
-        println(packet.value.contentToString())
-        it.outputStream.write(packet.value)
+        }.singleOp().request()
+        println(request.value.contentToString())
+        it.outputStream.write(request.value)
         val bytes = it.inputStream.readBytes()
         val ret = Return.decode(bytes)
         println(ret.isSuccess)
@@ -37,10 +37,10 @@ fun main() {
     Socket(tcpEndpoint.host, tcpEndpoint.port).use {
         it.tcpNoDelay = true
         val method = RMIServer::class.java.getMethod("newClient", Any::class.java)
-        val packet: Packet = rmiCall(liveRef.objID, method.jrmpHash) {
+        val request: Request = rmiCall(liveRef.objID, method.jrmpHash) {
             writeObject(CommonsCollections5().getObject("calc"))
-        }.singleOp().packet()
-        it.outputStream.write(packet.value)
+        }.singleOp().request()
+        it.outputStream.write(request.value)
         val bytes = it.inputStream.readBytes()
         val ret = Return.decode(bytes)
         println(ret.isSuccess)

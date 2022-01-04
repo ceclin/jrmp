@@ -10,8 +10,8 @@ import java.rmi.server.UID
 
 class Return(val isSuccess: Boolean, val stream: ObjectInputStream) {
     companion object {
-        fun decode(packet: ByteArray): Return {
-            val input = DataInputStream(ByteArrayInputStream(packet))
+        fun decode(response: ByteArray): Return {
+            val input = DataInputStream(ByteArrayInputStream(response))
             if (input.readByte() != TransportConstants.Return)
                 throw IllegalArgumentException("not a return packet")
             val marshal = MarshalInputStream(input)

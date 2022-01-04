@@ -9,7 +9,7 @@ import top.ceclin.jrmp.RegistryV1
 import top.ceclin.jrmp.RegistryV2
 import top.ceclin.jrmp.ext.replace
 import top.ceclin.jrmp.request.Operation
-import top.ceclin.jrmp.request.packet
+import top.ceclin.jrmp.request.request
 import top.ceclin.jrmp.request.singleOp
 import java.lang.reflect.Proxy
 import java.net.Socket
@@ -28,7 +28,7 @@ fun main() {
 private fun send(operation: Operation, host: String = "127.0.0.1", port: Int = Registry.REGISTRY_PORT) =
     Socket(host, port).use {
         it.tcpNoDelay = true
-        it.outputStream.write(operation.singleOp().packet().value)
+        it.outputStream.write(operation.singleOp().request().value)
         it.outputStream.flush()
         it.inputStream.readBytes()
     }
